@@ -1,1 +1,33 @@
 # Lab 2: Hosting a Web Server on the Cloud
+
+## Objectives
+
+- Access the AWS Console through the sandbox environment
+- Launch an AWS EC2 instance
+- Connect to the EC2 instance and install Nginx
+- Deploy a sample web page
+- Access the hosted web page through a web browser
+
+## Background Theory
+
+### Cloud Computing in IoT
+Cloud computing provides scalable computing resources over the internet.
+
+### AWS EC2
+Amazon EC2 is a virtual server service that allows users to run applications in the cloud.
+
+### Nginx Web Server
+Nginx is a lightweight web server used to host websites and applications.
+
+## Procedure
+
+1. Login to AWS Academy.
+2. Open AWS Console.
+3. Launch an Ubuntu EC2 instance.
+4. Configure Security Group (HTTP and SSH).
+5. Connect using SSH.
+6. Install Nginx:
+
+```bash
+sudo apt update
+sudo apt install nginx -y
