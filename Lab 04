@@ -1,1 +1,260 @@
-Lab 4 Title: Dockerizing FastAPI Application with Persistent TinyDB Storage
+# Lab 4: Dockerizing FastAPI Application with Persistent TinyDB Storage
+
+## Objectives
+
+* Understand containerization using Docker
+* Write a Dockerfile for a Python FastAPI application
+* Use Docker Compose for multi-component deployment
+* Persist application data using Docker volumes
+* Deploy a cloud-ready containerized REST API
+
+---
+
+## Background Theory
+
+### Containerization and its Advantages
+
+Containerization packages an application and its dependencies into a portable unit called a container. Containers ensure that applications run consistently across different environments.
+
+Advantages:
+
+* Lightweight and efficient
+* Faster deployment
+* Portability across platforms
+* Improved scalability
+* Simplified dependency management
+
+### VM-Based vs Container-Based Deployment
+
+| Virtual Machines               | Containers                |
+| ------------------------------ | ------------------------- |
+| Includes full operating system | Shares host OS kernel     |
+| Higher resource usage          | Lightweight               |
+| Slower startup time            | Faster startup time       |
+| Large storage requirements     | Smaller storage footprint |
+
+### Docker Basics
+
+Docker is a platform used to build, package, and deploy applications in containers.
+
+#### Containers
+
+Running instances of Docker images.
+
+#### Images
+
+Read-only templates used to create containers.
+
+#### Volumes
+
+Persistent storage mechanism for container data.
+
+#### Networks
+
+Allow communication between containers and external systems.
+
+### Dockerfile
+
+A Dockerfile contains instructions to build a Docker image.
+
+### Docker Compose
+
+Docker Compose is used to define and manage multi-container applications using a YAML configuration file.
+
+---
+
+## Procedure
+
+### Step 1: Launch AWS EC2 Instance
+
+* Login to AWS Academy Learner Lab.
+* Launch an Ubuntu EC2 instance.
+* Configure Security Group to allow:
+
+  * SSH (22)
+  * HTTP (80)
+
+### Step 2: Connect to EC2
+
+```bash
+ssh -i key.pem ubuntu@<public-ip>
+```
+
+### Step 3: Install Docker
+
+Update packages:
+
+```bash
+sudo apt update
+```
+
+Install Docker and Docker Compose:
+
+```bash
+sudo apt install -y docker.io docker-compose-v2
+```
+
+Enable Docker service:
+
+```bash
+sudo systemctl enable --now docker
+```
+
+Verify installation:
+
+```bash
+docker --version
+```
+
+---
+
+### Step 4: Create Project Structure
+
+```text
+restaurant_api/
+│
+├── app.py
+├── requirements.txt
+├── orders.json
+├── Dockerfile
+├── docker-compose.yml
+```
+
+---
+
+### Step 5: Create requirements.txt
+
+```text
+fastapi
+uvicorn
+tinydb
+```
+
+---
+
+### Step 6: Create Dockerfile
+
+```dockerfile
+FROM python:3.10-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+EXPOSE 8000
+
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
+```
+
+---
+
+### Step 7: Create docker-compose.yml
+
+```yaml
+services:
+  api:
+    build: .
+    container_name: restaurant_api
+    ports:
+      - "80:8000"
+    volumes:
+      - ./orders.json:/app/orders.json
+    restart: always
+```
+
+---
+
+### Step 8: Build Docker Image
+
+```bash
+docker build -t restaurant_api .
+```
+
+---
+
+### Step 9: Start Container
+
+```bash
+docker compose up -d
+```
+
+Check running containers:
+
+```bash
+docker ps
+```
+
+---
+
+### Step 10: Test REST API
+
+Open browser:
+
+```text
+http://<public-ip>/docs
+```
+
+Test:
+
+#### GET /
+
+Returns API status message.
+
+#### POST /order
+
+Adds a restaurant order.
+
+#### GET /orders
+
+Returns all stored orders.
+
+---
+
+### Step 11: Verify Persistent Storage
+
+Stop container:
+
+```bash
+docker compose down
+```
+
+Restart container:
+
+```bash
+docker compose up -d
+```
+
+Verify that orders remain stored in `orders.json`.
+
+---
+
+## Output
+
+* Successfully installed Docker and Docker Compose.
+* Created Docker image for FastAPI application.
+* Deployed REST API inside a Docker container.
+* Configured persistent TinyDB storage using Docker volumes.
+* Successfully tested API endpoints.
+* Accessed API documentation through web browser.
+
+### Screenshots
+
+1. Docker Installation
+2. Project Structure
+3. Dockerfile
+4. Docker Compose Configuration
+5. Docker Image Build
+6. Running Container
+7. FastAPI Swagger UI
+8. API Test Results
+
+---
+
+## Conclusion
+
+This lab demonstrated the containerization of a FastAPI application using Docker. A Docker image was created using a Dockerfile and deployed using Docker Compose. TinyDB data persistence was achieved through Docker volumes, ensuring that application data remained available even after container restarts. The resulting REST API was cloud-ready, portable, and easy to deploy.
+
