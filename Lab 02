@@ -2,32 +2,103 @@
 
 ## Objectives
 
-- Access the AWS Console through the sandbox environment
-- Launch an AWS EC2 instance
-- Connect to the EC2 instance and install Nginx
-- Deploy a sample web page
-- Access the hosted web page through a web browser
+* Access the AWS Console through the sandbox environment
+* Launch an AWS EC2 instance
+* Connect to the EC2 instance and install Nginx
+* Deploy a sample web page
+* Access the hosted web page through a web browser
 
 ## Background Theory
 
 ### Cloud Computing in IoT
-Cloud computing provides scalable computing resources over the internet.
+
+Cloud computing provides scalable computing resources over the internet and plays a vital role in IoT applications.
 
 ### AWS EC2
-Amazon EC2 is a virtual server service that allows users to run applications in the cloud.
+
+Amazon Elastic Compute Cloud (EC2) allows users to create and manage virtual servers in the cloud.
 
 ### Nginx Web Server
-Nginx is a lightweight web server used to host websites and applications.
+
+Nginx is a lightweight and high-performance web server used for hosting websites and web applications.
 
 ## Procedure
 
-1. Login to AWS Academy.
-2. Open AWS Console.
-3. Launch an Ubuntu EC2 instance.
-4. Configure Security Group (HTTP and SSH).
-5. Connect using SSH.
-6. Install Nginx:
+### Step 1: Login to AWS Console
+
+* Open AWS Academy Learner Lab.
+* Start the lab.
+* Launch the AWS Console.
+
+### Step 2: Launch EC2 Instance
+
+* Navigate to EC2 Dashboard.
+* Click "Launch Instance".
+* Select Ubuntu Server.
+* Choose t2.micro instance type.
+* Configure Security Group to allow HTTP (80) and SSH (22).
+* Launch the instance.
+
+### Step 3: Connect to EC2
+
+```bash
+ssh -i key.pem ubuntu@<public-ip>
+```
+
+### Step 4: Install Nginx
 
 ```bash
 sudo apt update
 sudo apt install nginx -y
+```
+
+### Step 5: Create a Sample Webpage
+
+Navigate to the web root directory:
+
+```bash
+cd /var/www/html
+```
+
+Edit the default page:
+
+```bash
+sudo nano index.html
+```
+
+Add:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<title>My AWS Website</title>
+</head>
+<body>
+<h1>Hello from AWS EC2!</h1>
+<p>Nginx Web Server Successfully Hosted.</p>
+</body>
+</html>
+```
+
+Save the file.
+
+### Step 6: Access the Website
+
+Open the EC2 Public IP in a browser:
+
+```text
+http://<public-ip>
+```
+
+## Output
+
+* Successfully launched an AWS EC2 instance.
+* Installed and configured Nginx.
+* Hosted a sample webpage.
+* Accessed the webpage through the EC2 Public IP address.
+
+## Conclusion
+
+The web server was successfully deployed on AWS EC2 using Nginx. The hosted webpage was accessible through a web browser using the instance's public IP address.
+
